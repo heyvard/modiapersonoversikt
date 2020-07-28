@@ -6,7 +6,7 @@ import {
 import { eldsteMelding } from '../../../utils/meldingerUtils';
 import { InnloggetSaksbehandler } from '../../../../../../../models/innloggetSaksbehandler';
 import { OppgaveProps, OppgaveSkjemaForm, SkjermetOppgaveSkjemaForm } from './oppgaveInterfaces';
-import { formatterDatoTidNaa } from '../../../../../../../utils/date-utils';
+import { formatterDatoTid } from '../../../../../../../utils/date-utils';
 import { Traad } from '../../../../../../../models/meldinger/meldinger';
 import { Mapped, Values } from '@nutgaard/use-formstate';
 
@@ -92,7 +92,6 @@ function lagBeskrivelse(
     innloggetSaksbehandler: InnloggetSaksbehandler,
     saksbehandlerEnhet?: string
 ) {
-    return `--- ${formatterDatoTidNaa()} ${innloggetSaksbehandler.navn} (${
-        innloggetSaksbehandler.ident
-    } ${saksbehandlerEnhet}) ---\n${beskrivelse}`;
+    const dato = formatterDatoTid(new Date());
+    return `--- ${dato} ${innloggetSaksbehandler.navn} (${innloggetSaksbehandler.ident} ${saksbehandlerEnhet}) ---\n${beskrivelse}`;
 }

@@ -123,7 +123,7 @@
         "@types/enzyme-adapter-react-16": "^1.0.5",
         "@types/faker": "^4.1.2",
         "@types/fetch-mock": "^6.0.3",
-        "@types/jest": "^20.0.8",
+        "@types/jest": "^24.0.0",
         "@types/js-cookie": "^2.2.0",
         "@types/lodash.debounce": "^4.0.6",
         "@types/md5": "^2.1.33",

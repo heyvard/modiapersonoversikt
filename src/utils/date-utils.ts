@@ -26,44 +26,30 @@ export function formatterDatoTidMedMaanedsnavn(dato?: string | Date) {
     return moment(dato).format(DATO_TID_MANEDSNANV_FORMAT);
 }
 
-export function formatterDatoTidNaa() {
-    return moment().format(DATO_TID_FORMAT);
-}
-
-const månedTilNavnMapping = (månednr: number) => {
-    switch (månednr) {
-        case 0:
-            return 'Januar';
-        case 1:
-            return 'Februar';
-        case 2:
-            return 'Mars';
-        case 3:
-            return 'April';
-        case 4:
-            return 'Mai';
-        case 5:
-            return 'Juni';
-        case 6:
-            return 'Juli';
-        case 7:
-            return 'August';
-        case 8:
-            return 'September';
-        case 9:
-            return 'Oktober';
-        case 10:
-            return 'November';
-        case 11:
-            return 'Desember';
-        default:
-            return 'N/A';
+const maneder = [
+    'Januar',
+    'Februar',
+    'Mars',
+    'April',
+    'Mai',
+    'Juni',
+    'Juli',
+    'August',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
+];
+const manedTilNavnMapping = (manednr: number) => {
+    if (manednr < 0 || manednr > 11) {
+        return 'N/A';
     }
+    return maneder[manednr];
 };
 
 export function datoVerbose(dato?: string | Date) {
     const datoMoment = dato ? moment(dato) : moment();
-    const måned = månedTilNavnMapping(datoMoment.month());
+    const måned = manedTilNavnMapping(datoMoment.month());
     const år = datoMoment.year();
     const dag = datoMoment.date();
     const klokkeslett = datoMoment.format('HH:mm');
@@ -102,7 +88,7 @@ export function getNewestDate<T extends string | Date>(date1: T, date2: T): T {
     return moment(date1).isAfter(date2) ? date1 : date2;
 }
 
-export function ascendingDateComparator(a: Date | string, b: Date | string) {
+export function ascendingDateComparator(a: Date | string, b: Date | string): number {
     const dateA = moment(a);
     const dateB = moment(b);
     if (!dateA.isValid() || !dateB.isValid()) {
