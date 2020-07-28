@@ -1,29 +1,51 @@
-import moment from 'moment';
-import 'moment/locale/nb';
 import { loggError } from './logger/frontendLogger';
 
 export const backendDatoformat: string = 'YYYY-MM-DD';
 export const backendDatoTidformat: string = 'YYYY-MM-DD HH:mm';
 
-const DATO_FORMAT = 'DD.MM.YYYY';
-const DATO_FORMAT_MANEDSNAVN = 'DD. MMM YYYY';
-const DATO_TID_FORMAT = 'DD.MM.YYYY HH:mm';
-const DATO_TID_MANEDSNANV_FORMAT = 'DD. MMM YYYY HH:mm';
+const locale = 'nb-NO';
+const dateLocaleOptions: Intl.DateTimeFormatOptions = {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric'
+};
+const timeLocaleOptions: Intl.DateTimeFormatOptions = {
+    ...dateLocaleOptions,
+    hour: '2-digit',
+    hour12: false,
+    minute: '2-digit',
+    second: undefined
+};
+
+const DATO_FORMAT = new Intl.DateTimeFormat(locale, dateLocaleOptions);
+const DATO_FORMAT_MANEDSNAVN = new Intl.DateTimeFormat(locale, { ...dateLocaleOptions, month: 'long' });
+const DATO_TID_FORMAT = new Intl.DateTimeFormat(locale, timeLocaleOptions);
+const DATO_TID_MANEDSNANV_FORMAT = new Intl.DateTimeFormat(locale, { ...timeLocaleOptions, month: 'long' });
+
+function asDate(dato?: string | Date): Date {
+    if (!dato) {
+        return new Date();
+    }
+    if (dato instanceof Date) {
+        return dato;
+    }
+    return new Date(dato);
+}
 
 export function formatterDato(dato: string | Date) {
-    return moment(dato).format(DATO_FORMAT);
+    return DATO_FORMAT.format(asDate(dato));
 }
 
 export function formatterDatoMedMaanedsnavn(dato: string | Date) {
-    return moment(dato).format(DATO_FORMAT_MANEDSNAVN);
+    return DATO_FORMAT_MANEDSNAVN.format(asDate(dato));
 }
 
 export function formatterDatoTid(dato: string | Date) {
-    return moment(dato).format(DATO_TID_FORMAT);
+    return DATO_TID_FORMAT.format(asDate(dato));
 }
 
-export function formatterDatoTidMedMaanedsnavn(dato?: string | Date) {
-    return moment(dato).format(DATO_TID_MANEDSNANV_FORMAT);
+export function formatterDatoTidMedMaanedsnavn(dato: string | Date) {
+    return DATO_TID_MANEDSNANV_FORMAT.format(asDate(dato));
 }
 
 const maneder = [
@@ -48,50 +70,56 @@ const manedTilNavnMapping = (manednr: number) => {
 };
 
 export function datoVerbose(dato?: string | Date) {
-    const datoMoment = dato ? moment(dato) : moment();
-    const måned = manedTilNavnMapping(datoMoment.month());
-    const år = datoMoment.year();
-    const dag = datoMoment.date();
-    const klokkeslett = datoMoment.format('HH:mm');
+    const datoMoment = asDate(dato);
+    const maned = manedTilNavnMapping(datoMoment.getMonth());
+    const ar = datoMoment.getFullYear();
+    const dag = datoMoment.getDate();
+    const klokkeslett = [datoMoment.getHours(), datoMoment.getMinutes()]
+        .map(part => part.toString().padStart(2, '0'))
+        .join(':');
+
     return {
         dag: dag,
-        måned: måned,
-        år: år,
-        sammensatt: `${dag}. ${måned} ${år}`,
-        sammensattMedKlokke: `${dag}. ${måned} ${år} ${klokkeslett}`,
-        meldingerFormat: `${dag}. ${måned} ${år}, klokken ${klokkeslett}`
+        måned: maned,
+        år: ar,
+        sammensatt: `${dag}. ${maned} ${ar}`,
+        sammensattMedKlokke: `${dag}. ${maned} ${ar} ${klokkeslett}`,
+        meldingerFormat: `${dag}. ${maned} ${ar}, klokken ${klokkeslett}`
     };
 }
 
 export function isValidDate(date: string | Date) {
-    return moment(date).isValid();
+    return asDate(date).toString() !== 'Invalid Date';
 }
 
-export function erImorgenEllerSenere(date: Date) {
-    return moment(date).isAfter(new Date(), 'day');
+export function erMaks10MinSiden(datoStr: string | Date) {
+    const dato = asDate(datoStr);
+    const now = new Date().getTime();
+    const tiMinutterSiden = new Date(now - 10 * 60 * 1000);
+
+    return dato > tiMinutterSiden;
 }
 
-export function erMaks10MinSiden(date: string | Date) {
-    return moment(date).isAfter(moment().subtract(10, 'minute'));
-}
+export function erMaksEttÅrFramITid(datoStr: Date) {
+    const dato = asDate(datoStr);
+    const ettArIFremtiden = new Date();
+    ettArIFremtiden.setFullYear(ettArIFremtiden.getFullYear() + 1);
 
-export function erMaksEttÅrFramITid(date: Date) {
-    const ettÅrFramITid = moment().add(1, 'years');
-    return moment(date).isSameOrBefore(ettÅrFramITid);
+    return dato <= ettArIFremtiden;
 }
 
 export function getOldestDate<T extends string | Date>(date1: T, date2: T): T {
-    return moment(date1).isBefore(date2) ? date1 : date2;
+    return date1 < date2 ? date1 : date2;
 }
 
 export function getNewestDate<T extends string | Date>(date1: T, date2: T): T {
-    return moment(date1).isAfter(date2) ? date1 : date2;
+    return date1 >= date2 ? date1 : date2;
 }
 
 export function ascendingDateComparator(a: Date | string, b: Date | string): number {
-    const dateA = moment(a);
-    const dateB = moment(b);
-    if (!dateA.isValid() || !dateB.isValid()) {
+    const dateA = asDate(a);
+    const dateB = asDate(b);
+    if (!isValidDate(dateA) || !isValidDate(dateB)) {
         loggError(Error('Invalid date in date comparator'), undefined, { datoA: a, datoB: b });
     }
     return +dateA - +dateB;

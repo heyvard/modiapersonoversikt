@@ -24,13 +24,13 @@ describe('formatterDatoMedMaanedsnavn', () => {
 
 describe('formatterDatoTid', () => {
     it.each(datoerMedTid)('skal formatere %o som dato med tid', dato => {
-        expect(DateUtils.formatterDatoTid(dato)).toBe('23.07.2020 13:37');
+        expect(DateUtils.formatterDatoTid(dato)).toBe('23.07.2020, 13:37');
     });
 });
 
 describe('formatterDatoTidMedMaanedsnavn', () => {
     it.each(datoerMedTid)('skal formatere %o som dato med månedsnavn og tid', dato => {
-        expect(DateUtils.formatterDatoTidMedMaanedsnavn(dato)).toBe('23. juli 2020 13:37');
+        expect(DateUtils.formatterDatoTidMedMaanedsnavn(dato)).toBe('23. juli 2020, 13:37');
     });
 });
 
@@ -53,18 +53,6 @@ describe('isValidDate', () => {
 
     it('skal ikke validere dato', () => {
         expect(DateUtils.isValidDate('1986-14-28T12:00')).toBe(false);
-    });
-});
-
-describe('erImorgenEllerSenere', () => {
-    it('Dagens dato', () => {
-        expect(DateUtils.erImorgenEllerSenere(new Date())).toBe(false);
-    });
-
-    it('Fremtidens dato', () => {
-        const date = new Date();
-        date.setFullYear(date.getFullYear() + 1);
-        expect(DateUtils.erImorgenEllerSenere(date)).toBe(true);
     });
 });
 
