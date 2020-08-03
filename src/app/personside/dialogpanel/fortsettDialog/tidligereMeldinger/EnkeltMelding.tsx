@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import Tekstomrade from 'nav-frontend-tekstomrade';
 import { Element, Undertekst } from 'nav-frontend-typografi';
 import { Melding } from '../../../../../models/meldinger/meldinger';
-import { formatterDatoTidMedMaanedsnavn } from '../../../../../utils/date-utils';
+import { formaterDatoTidMedMaanedsnavn } from '../../../../../utils/date-utils';
 import { meldingstittel } from '../../../infotabs/meldinger/utils/meldingerUtils';
 import theme from '../../../../../styles/personOversiktTheme';
 import { Avsender } from '../../../infotabs/meldinger/traadvisning/Enkeltmelding';
@@ -43,7 +43,7 @@ function EnkeltMelding(props: Props) {
             <span className="sr-only">Melding {props.meldingsNummer}</span>
             <span className="sr-only">{apen ? 'Åpen' : 'Lukket'}</span>
             <Element tag="h4">{meldingstittel(props.melding)}</Element>
-            <Undertekst>{formatterDatoTidMedMaanedsnavn(props.melding.opprettetDato)}</Undertekst>
+            <Undertekst>{formaterDatoTidMedMaanedsnavn(props.melding.opprettetDato)}</Undertekst>
             <Avsender melding={props.melding} />
         </HeaderStyle>
     );

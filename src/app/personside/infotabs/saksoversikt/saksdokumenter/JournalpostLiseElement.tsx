@@ -9,7 +9,6 @@ import {
 } from '../../../../../models/saksoversikt/journalpost';
 import styled, { css } from 'styled-components/macro';
 import theme from '../../../../../styles/personOversiktTheme';
-import moment from 'moment';
 import { saksdatoSomDate } from '../../../../../models/saksoversikt/fellesSak';
 import { Normaltekst } from 'nav-frontend-typografi';
 import DokumentIkon from '../../../../../svg/DokumentIkon';
@@ -22,6 +21,7 @@ import { useInfotabsDyplenker } from '../../dyplenker';
 import DokumentLenke from './DokumentLenke';
 import { useRestResource } from '../../../../../rest/consumer/useRestResource';
 import { guid } from 'nav-frontend-js-utils';
+import { formaterDato } from '../../../../../utils/date-utils';
 
 interface Props {
     journalpost: Journalpost;
@@ -93,7 +93,7 @@ function utgåendeTekst(mottaker: Entitet, mottakernavn: string) {
 }
 
 function formaterDatoOgAvsender(brukernavn: string, dokument: Journalpost) {
-    const dato = moment(saksdatoSomDate(dokument.dato)).format('DD.MM.YYYY');
+    const dato = formaterDato(saksdatoSomDate(dokument.dato));
     return `${dato} / ${tekstBasertPåRetning(brukernavn, dokument)}`;
 }
 
@@ -163,7 +163,6 @@ function JournalpostLiseElement(props: Props) {
     const tilgangTilHoveddokument = dokumentKanVises(journalpost.hoveddokument, journalpost);
 
     const hovedDokument = journalpost.hoveddokument;
-
     return (
         <li>
             <StyledArticle

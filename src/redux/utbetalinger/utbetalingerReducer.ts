@@ -1,6 +1,8 @@
-import moment from 'moment';
 import { PeriodeValg, UtbetalingerState } from './types';
 import { actionKeys, Actions } from './actions';
+
+const enManedSiden = new Date(Date.now());
+enManedSiden.setMonth(enManedSiden.getMonth() - 1);
 
 const initialState: UtbetalingerState = {
     ytelseIFokus: null,
@@ -9,10 +11,8 @@ const initialState: UtbetalingerState = {
         periode: {
             radioValg: PeriodeValg.SISTE_30_DAGER,
             egendefinertPeriode: {
-                fra: moment()
-                    .subtract(1, 'month')
-                    .toDate(),
-                til: new Date()
+                fra: enManedSiden,
+                til: new Date(Date.now())
             }
         },
         utbetaltTil: [],

@@ -17,7 +17,7 @@ export function setupSaksbehandlerInnstillingerMock(mock: FetchMock) {
 
     mock.post('/modiapersonoversikt-innstillinger/api/innstillinger', (req, res, ctx) => {
         innstillinger = {
-            sistLagret: new Date().toISOString(),
+            sistLagret: new Date(Date.now()).toISOString(),
             innstillinger: req.body
         };
         return res(ctx.status(200), ctx.json(innstillinger));

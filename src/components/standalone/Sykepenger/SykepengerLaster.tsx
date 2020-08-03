@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import { SykepengerResponse } from '../../../models/ytelse/sykepenger';
 import { loggError, loggEvent } from '../../../utils/logger/frontendLogger';
 import Sykepenger from '../../../app/personside/infotabs/ytelser/sykepenger/Sykepenger';
-import moment from 'moment';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import RestResourceConsumer from '../../../rest/consumer/RestResourceConsumer';
 import { BigCenteredLazySpinner } from '../../BigCenteredLazySpinner';
 import Panel from 'nav-frontend-paneler';
+import { asDate } from '../../../utils/date-utils';
 
 interface OwnProps {
     fødselsnummer: string;
@@ -25,9 +25,10 @@ function SykePengerLaster(props: Props) {
         if (!data.sykepenger) {
             return <AlertStripeInfo>Kunne ikke finne sykepengerettighet for bruker</AlertStripeInfo>;
         }
-        const aktuellRettighet = data.sykepenger.find(rettighet =>
-            moment(rettighet.sykmeldtFom).isSame(moment(props.sykmeldtFraOgMed))
-        );
+        const aktuellRettighet = data.sykepenger.find(rettighet => {
+            return asDate(rettighet.sykmeldtFom).getTime() === asDate(props.sykmeldtFraOgMed).getTime();
+        });
+
         if (!aktuellRettighet) {
             loggError(new Error('Kunne ikke finne sykepengerettighet'), undefined, {
                 fnr: props.fødselsnummer,

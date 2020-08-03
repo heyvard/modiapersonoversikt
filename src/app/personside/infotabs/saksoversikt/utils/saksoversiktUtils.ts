@@ -1,10 +1,10 @@
 import { Journalpost } from '../../../../../models/saksoversikt/journalpost';
 import { Behandlingskjede, Sakstema } from '../../../../../models/saksoversikt/sakstema';
-import moment from 'moment';
 import { sakstemakodeAlle } from '../sakstemaliste/SakstemaListe';
 import { saksdatoSomDate } from '../../../../../models/saksoversikt/fellesSak';
 import { useMemo } from 'react';
 import { useRestResource } from '../../../../../rest/consumer/useRestResource';
+import { formaterDato } from '../../../../../utils/date-utils';
 
 export function aggregertSakstema(alleSakstema: Sakstema[]): Sakstema {
     const alleBehandlingskjeder = aggregerSakstemaGenerisk(alleSakstema, sakstema => sakstema.behandlingskjeder);
@@ -37,7 +37,7 @@ function aggregerSakstemaGenerisk<T>(alleSakstema: Sakstema[], getGeneriskElemen
 }
 
 export function hentFormattertDatoForSisteHendelse(sakstema: Sakstema) {
-    return formatterDato(hentDatoForSisteHendelse(sakstema));
+    return formaterDato(hentDatoForSisteHendelse(sakstema));
 }
 
 export function hentDatoForSisteHendelse(sakstema: Sakstema): Date {
@@ -63,10 +63,6 @@ function hentSenesteDatoForBehandling(behandlingskjede: Behandlingskjede[]) {
     return behandlingskjede.reduce((acc: Date, kjede: Behandlingskjede) => {
         return acc > saksdatoSomDate(kjede.sistOppdatert) ? acc : saksdatoSomDate(kjede.sistOppdatert);
     }, new Date(0));
-}
-
-function formatterDato(date: Date) {
-    return moment(date).format('DD.MM.YYYY');
 }
 
 export function getUnikSakstemaKey(sakstema: Sakstema) {

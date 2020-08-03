@@ -4,8 +4,6 @@ import { statiskMockUtbetaling } from '../../../../../mock/utbetalinger/statiskM
 import TotaltUtbetaltDetaljer from './TotaltUtbetaltDetaljer';
 import { Utbetaling, UtbetalingerPeriode } from '../../../../../models/utbetalinger';
 
-Date.now = jest.fn(() => new Date()); // for å motvirke Date.now() mock i setupTests.ts
-
 const periode: UtbetalingerPeriode = {
     startDato: '17-05-1905',
     sluttDato: '17-05-1905'

@@ -16,12 +16,9 @@ import {
     summertBeløpStringFraUtbetalinger,
     utbetalingDatoComparator
 } from './utbetalinger-utils';
-import moment from 'moment';
 import { statiskMockUtbetaling, statiskMockYtelse } from '../../../../../mock/utbetalinger/statiskMockUtbetaling';
 import { Periode } from '../../../../../models/tid';
 import { PeriodeValg, UtbetalingFilterState } from '../../../../../redux/utbetalinger/types';
-
-Date.now = jest.fn(() => new Date()); // for å motvirke Date.now() mock i setupTests.ts
 
 const randomUtbetaling = getMockUtbetaling();
 
@@ -222,8 +219,8 @@ const mockFilter: UtbetalingFilterState = {
     periode: {
         radioValg: PeriodeValg.SISTE_30_DAGER,
         egendefinertPeriode: {
-            fra: new Date(),
-            til: new Date()
+            fra: new Date(Date.now()),
+            til: new Date(Date.now())
         }
     },
     ytelser: [],
@@ -242,18 +239,15 @@ test('henter riktig fra og til-date fra filter ved valg av "siste 30 dager"', ()
     const fraDate: Date = getFraDateFromFilter(filter);
     const tilDate: Date = getTilDateFromFilter(filter);
 
-    expect(moment(fraDate).toString()).toEqual(
-        moment()
-            .subtract(30, 'day')
-            .startOf('day')
-            .toString()
-    );
-    expect(moment(tilDate).toString()).toEqual(
-        moment()
-            .add(100, 'day')
-            .endOf('day')
-            .toString()
-    );
+    const forventetFraDate = new Date(Date.now());
+    forventetFraDate.setDate(forventetFraDate.getDate() - 30);
+    forventetFraDate.setHours(0, 0, 0, 0);
+    expect(fraDate.getTime()).toEqual(forventetFraDate.getTime());
+
+    const forventetTilDate = new Date(Date.now());
+    forventetTilDate.setDate(forventetTilDate.getDate() + 100);
+    forventetTilDate.setHours(23, 59, 59, 999);
+    expect(tilDate.getTime()).toEqual(forventetTilDate.getTime());
 });
 
 test('henter riktig fra og til-date fra filter ved valg av "inneværende år', () => {
@@ -268,17 +262,15 @@ test('henter riktig fra og til-date fra filter ved valg av "inneværende år', (
     const fraDate: Date = getFraDateFromFilter(filter);
     const tilDate: Date = getTilDateFromFilter(filter);
 
-    expect(moment(fraDate).toString()).toEqual(
-        moment()
-            .startOf('year')
-            .toString()
-    );
-    expect(moment(tilDate).toString()).toEqual(
-        moment()
-            .add(100, 'day')
-            .endOf('day')
-            .toString()
-    );
+    const forventetFraDate = new Date(Date.now());
+    forventetFraDate.setMonth(0, 1);
+    forventetFraDate.setHours(0, 0, 0, 0);
+    expect(fraDate.getTime()).toEqual(forventetFraDate.getTime());
+
+    const forventetTilDate = new Date(Date.now());
+    forventetTilDate.setDate(forventetTilDate.getDate() + 100);
+    forventetTilDate.setHours(23, 59, 59, 999);
+    expect(tilDate.getTime()).toEqual(forventetTilDate.getTime());
 });
 
 test('henter riktig fra og til-date fra filter ved valg av "i fjor', () => {
@@ -293,18 +285,17 @@ test('henter riktig fra og til-date fra filter ved valg av "i fjor', () => {
     const fraDate: Date = getFraDateFromFilter(filter);
     const tilDate: Date = getTilDateFromFilter(filter);
 
-    expect(moment(fraDate).toString()).toEqual(
-        moment()
-            .subtract(1, 'year')
-            .startOf('year')
-            .toString()
-    );
-    expect(moment(tilDate).toString()).toEqual(
-        moment()
-            .subtract(1, 'year')
-            .endOf('year')
-            .toString()
-    );
+    const forventetFraDate = new Date(Date.now());
+    forventetFraDate.setFullYear(forventetFraDate.getFullYear() - 1);
+    forventetFraDate.setMonth(0, 1);
+    forventetFraDate.setHours(0, 0, 0, 0);
+    expect(fraDate.getTime()).toEqual(forventetFraDate.getTime());
+
+    const forventetTilDate = new Date(Date.now());
+    forventetTilDate.setFullYear(forventetTilDate.getFullYear() - 1);
+    forventetTilDate.setMonth(11, 31);
+    forventetTilDate.setHours(23, 59, 59, 999);
+    expect(tilDate.getTime()).toEqual(forventetTilDate.getTime());
 });
 
 test('henter riktig fra og til-date fra filter ved valg av "egendefinert periode', () => {
@@ -322,8 +313,8 @@ test('henter riktig fra og til-date fra filter ved valg av "egendefinert periode
     const fraDate: Date = getFraDateFromFilter(filter);
     const tilDate: Date = getTilDateFromFilter(filter);
 
-    expect(moment(fraDate).toString()).toEqual(moment(0).toString());
-    expect(moment(tilDate).toString()).toEqual(moment(0).toString());
+    expect(fraDate.getTime()).toEqual(new Date(0).getTime());
+    expect(tilDate.getTime()).toEqual(new Date(0).getTime());
 });
 
 test('filtrerer bort utbetalinger som ikke er utbetalt', () => {

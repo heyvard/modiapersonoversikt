@@ -8,7 +8,6 @@ import {
 } from '../../models/meldinger/meldinger';
 import faker from 'faker/locale/nb_NO';
 import navfaker from 'nav-faker';
-import moment from 'moment';
 import { fyllRandomListe } from '../utils/mock-utils';
 import {
     erMeldingstypeSamtalereferat,
@@ -85,20 +84,16 @@ function getMelding(temagruppe: Temagruppe): Melding {
         temagruppe: temagruppe,
         skrevetAvTekst: saksbehandlerTekst(getSaksbehandler()),
         journalfortAv: getSaksbehandler(),
-        journalfortDato: navfaker.random.vektetSjanse(0.5)
-            ? moment(faker.date.recent(50)).format(backendDatoTidformat)
-            : undefined,
+        journalfortDato: navfaker.random.vektetSjanse(0.5) ? backendDatoTidformat(faker.date.recent(50)) : undefined,
         journalfortSaksid: faker.random.alphaNumeric(5),
         journalfortTemanavn: navfaker.random.arrayElement(['Dagpenger', 'Arbeid', 'Pensjon', 'Bidrag']),
         fritekst: fritekst,
-        lestDato: moment(faker.date.recent(40)).format(backendDatoTidformat),
+        lestDato: backendDatoTidformat(faker.date.recent(40)),
         status: navfaker.random.arrayElement([LestStatus.IkkeLest, LestStatus.Lest]),
-        opprettetDato: moment(faker.date.recent(40)).format(backendDatoTidformat),
-        ferdigstiltDato: moment(faker.date.recent(40)).format(backendDatoTidformat),
+        opprettetDato: backendDatoTidformat(faker.date.recent(40)),
+        ferdigstiltDato: backendDatoTidformat(faker.date.recent(40)),
         erFerdigstiltUtenSvar: ferdigstilUtenSvar,
-        ferdigstiltUtenSvarDato: ferdigstilUtenSvar
-            ? moment(faker.date.recent(40)).format(backendDatoTidformat)
-            : undefined,
+        ferdigstiltUtenSvarDato: ferdigstilUtenSvar ? backendDatoTidformat(faker.date.recent(40)) : undefined,
         ferdigstiltUtenSvarAv: ferdigstilUtenSvar ? getSaksbehandler() : undefined,
         kontorsperretAv: visKontrosperre ? getSaksbehandler() : undefined,
         kontorsperretEnhet: visKontrosperre ? faker.company.companyName() : undefined,

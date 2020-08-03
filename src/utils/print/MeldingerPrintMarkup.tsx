@@ -7,10 +7,9 @@ import {
     meldingstittel
 } from '../../app/personside/infotabs/meldinger/utils/meldingerUtils';
 import { Element, Ingress, Normaltekst } from 'nav-frontend-typografi';
-import { datoStigende, formatterDatoMedMaanedsnavn, formatterDatoTid } from '../date-utils';
+import { datoStigende, formaterDato, formaterDatoMedMaanedsnavn, formaterDatoTid } from '../date-utils';
 import styled from 'styled-components';
 import theme from '../../styles/personOversiktTheme';
-import { formaterDato } from '../string-utils';
 import Tekstomrade from 'nav-frontend-tekstomrade';
 
 interface Props {
@@ -56,7 +55,7 @@ function EnkeltMeldingMarkup({ melding }: { melding: Melding }) {
     const temagruppe = melding.temagruppe && <Element>Temagruppe: {melding.temagruppe}</Element>;
 
     const lest = melding.lestDato ? (
-        <Normaltekst>Lest: {formatterDatoTid(melding.lestDato)}</Normaltekst>
+        <Normaltekst>Lest: {formaterDatoTid(melding.lestDato)}</Normaltekst>
     ) : (
         <Normaltekst>Ulest</Normaltekst>
     );
@@ -94,7 +93,7 @@ function MeldingerPrintMarkup(props: Props) {
     const ferdigstiltUtenSvar = melding.erFerdigstiltUtenSvar && (
         <Element>
             Henvendelsen er avsluttet uten å svare bruker{' '}
-            {melding.ferdigstiltUtenSvarDato && formatterDatoMedMaanedsnavn(melding.ferdigstiltUtenSvarDato)}{' '}
+            {melding.ferdigstiltUtenSvarDato && formaterDatoMedMaanedsnavn(melding.ferdigstiltUtenSvarDato)}{' '}
         </Element>
     );
     const feilsendt = melding.markertSomFeilsendtAv && (

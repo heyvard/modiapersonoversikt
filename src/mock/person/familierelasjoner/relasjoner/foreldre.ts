@@ -1,14 +1,12 @@
-import moment from 'moment';
-import { Moment } from 'moment';
-
 import navfaker from 'nav-faker';
 
+import * as DateUtils from '../../../../utils/date-utils';
 import { tilfeldigFodselsnummer } from '../../../utils/fnr-utils';
 import { getPersonstatus } from '../../personMock';
 import { lagNavn, getAlderFromFødselsnummer } from '../../../utils/person-utils';
 import { Familierelasjon, Kjønn, Relasjonstype } from '../../../../models/person/person';
 
-export function lagForeldre(barnetsAlder: Moment): Familierelasjon[] {
+export function lagForeldre(barnetsAlder: Date): Familierelasjon[] {
     let foreldre = [];
     if (navfaker.random.vektetSjanse(0.9)) {
         foreldre.push(lagForelder(barnetsAlder, Relasjonstype.Mor));
@@ -19,9 +17,9 @@ export function lagForeldre(barnetsAlder: Moment): Familierelasjon[] {
     return foreldre;
 }
 
-function lagForelder(barnetsFødselsdato: Moment, relasjonstype: Relasjonstype) {
+function lagForelder(barnetsFødselsdato: Date, relasjonstype: Relasjonstype) {
     const kjønn = relasjonstype === Relasjonstype.Mor ? Kjønn.Kvinne : Kjønn.Mann;
-    const foreldersFødselsnummer = lagFødselsnummer(barnetsFødselsdato, kjønn);
+    const foreldersFødselsnummer = lagFodselsnummer(barnetsFødselsdato, kjønn);
     const alder = getAlderFromFødselsnummer(foreldersFødselsnummer);
     return {
         harSammeBosted: navfaker.random.vektetSjanse(0.9),
@@ -36,10 +34,12 @@ function lagForelder(barnetsFødselsdato: Moment, relasjonstype: Relasjonstype) 
     };
 }
 
-function lagFødselsnummer(barnetsFødselsdato: moment.Moment, kjønn: Kjønn) {
-    const minFødselsdato = barnetsFødselsdato.subtract(18, 'years');
-    const maxFødselsdato = moment.min(minFødselsdato, moment().subtract(100, 'years'));
-    const fødselsdato = navfaker.dato.mellom(minFødselsdato.toDate(), maxFødselsdato.toDate());
-    const foreldersFødselsnummer = tilfeldigFodselsnummer(fødselsdato, kjønn);
-    return foreldersFødselsnummer;
+function lagFodselsnummer(barnetsFodselsdato: Date, kjonn: Kjønn) {
+    const minFodselsdato = DateUtils.copy(barnetsFodselsdato);
+    minFodselsdato.setFullYear(minFodselsdato.getFullYear() - 18);
+    const maxFodselsdato = new Date(Date.now());
+    maxFodselsdato.setFullYear(maxFodselsdato.getFullYear() - 100);
+
+    const fodselsdato = navfaker.dato.mellom(minFodselsdato, maxFodselsdato);
+    return tilfeldigFodselsnummer(fodselsdato, kjonn);
 }

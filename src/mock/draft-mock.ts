@@ -16,7 +16,7 @@ if (!storage.getItem(storageKey)) {
                 owner: innloggetSaksbehandler.ident,
                 content: 'Dette er innhold fra kladde-løsningen',
                 context: { fnr: '10108000398' },
-                created: new Date().toISOString()
+                created: new Date(Date.now()).toISOString()
             }
         ])
     );
@@ -53,7 +53,7 @@ const updateDraft: MockHandler = ({ body }, res, ctx) => {
         owner: innloggetSaksbehandler.ident,
         content: body.content,
         context: body.context,
-        created: new Date().toISOString()
+        created: new Date(Date.now()).toISOString()
     };
 
     drafts = drafts.filter((draft: Draft) => !matchContext(draft.context, body.context, true));
@@ -72,7 +72,6 @@ const deleteDraft: MockHandler = ({ body }, res, ctx) => {
 };
 
 export function setupDraftMock(mock: FetchMock) {
-    // console.log(findDrafts, updateDraft, deleteDraft);
     mock.get('/modiapersonoversikt-draft/api/draft', delayed(2 * randomDelay(), findDrafts));
     mock.post('/modiapersonoversikt-draft/api/draft', delayed(2 * randomDelay(), updateDraft));
     mock.delete('/modiapersonoversikt-draft/api/draft', delayed(2 * randomDelay(), deleteDraft));

@@ -1,6 +1,4 @@
 import faker from 'faker/locale/nb_NO';
-import moment from 'moment';
-
 import navfaker from 'nav-faker/dist/index';
 import {
     Arbeidsforhold,
@@ -14,7 +12,7 @@ import { fyllRandomListe } from '../utils/mock-utils';
 import { aremark } from '../person/aremark';
 import { moss } from '../person/moss';
 import { pleiepengerTestData } from '../../app/personside/infotabs/ytelser/pleiepenger/pleiepengerTestData';
-import { backendDatoformat } from '../../utils/date-utils';
+import * as DateUtils from '../../utils/date-utils';
 
 export function getMockPleiepenger(fødselsnummer: string): PleiepengerResponse {
     if (fødselsnummer === aremark.fødselsnummer) {
@@ -63,7 +61,7 @@ export function getMockPleiepengerettighet(fødselsnummer: string): Pleiepengere
 
 function getPleiepengeperiode(): Pleiepengeperiode {
     return {
-        fom: moment(faker.date.past(2)).format(backendDatoformat),
+        fom: DateUtils.backendDatoformat(faker.date.past(2)),
         antallPleiepengedager: navfaker.random.integer(20),
         arbeidsforhold: fyllRandomListe<Arbeidsforhold>(() => getArbeidsforhold(), 2),
         vedtak: fyllRandomListe<Vedtak>(() => getVedtak(), 3)
@@ -76,7 +74,7 @@ function getArbeidsforhold(): Arbeidsforhold {
         arbeidsgiverKontonr: Number(faker.finance.account(11)).toString(),
         inntektsperiode: 'Månedssats',
         inntektForPerioden: Math.round(Number(faker.finance.amount(5000, 50000))),
-        refusjonTom: moment(faker.date.past(2)).format(backendDatoformat),
+        refusjonTom: DateUtils.backendDatoformat(faker.date.past(2)),
         refusjonstype: 'Ikke refusjon',
         arbeidsgiverOrgnr: '1234567890',
         arbeidskategori: 'Arbeidstaker'
@@ -88,7 +86,7 @@ function getVedtak(): Vedtak {
         periode: getPeriode(),
         kompensasjonsgrad: navfaker.random.vektetSjanse(0.5) ? 100 : navfaker.random.integer(100),
         utbetalingsgrad: navfaker.random.vektetSjanse(0.5) ? 100 : navfaker.random.integer(100),
-        anvistUtbetaling: moment(faker.date.past(2)).format(backendDatoformat),
+        anvistUtbetaling: DateUtils.backendDatoformat(faker.date.past(2)),
         bruttobeløp: Number(faker.commerce.price()),
         dagsats: navfaker.random.integer(70),
         pleiepengegrad: navfaker.random.integer(100)
@@ -96,10 +94,11 @@ function getVedtak(): Vedtak {
 }
 
 function getPeriode(): Periode {
-    const fom = moment(faker.date.past(2));
-    const tom = moment(fom).add(faker.random.number(40), 'days');
+    const fom = faker.date.past(2);
+    const tom = DateUtils.copy(fom); //.add(faker.random.number(40), 'days');
+    tom.setDate(tom.getDate() + faker.random.number(40));
     return {
-        fom: fom.format(backendDatoformat),
-        tom: tom.format(backendDatoformat)
+        fom: DateUtils.backendDatoformat(fom),
+        tom: DateUtils.backendDatoformat(tom)
     };
 }

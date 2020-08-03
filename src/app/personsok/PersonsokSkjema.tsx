@@ -17,7 +17,6 @@ import styled from 'styled-components/macro';
 import theme from '../../styles/personOversiktTheme';
 import { erTall } from '../../utils/string-utils';
 import { removeWhitespaceAndDot, validerKontonummer } from './kontonummer/kontonummerUtils';
-import moment from 'moment';
 import { feilmelding } from '../personside/infotabs/meldinger/traadvisning/verktoylinje/oppgave/validering';
 
 interface Props {
@@ -84,12 +83,12 @@ export const validatorPersonsok: FunctionValidator<PersonSokFormState> = values 
 
     let fodselsdatoFra = undefined;
     let fodselsdatoTil = undefined;
-    const fra = moment(values.fodselsdatoFra).toDate();
-    const til = moment(values.fodselsdatoTil).toDate();
+    const fra = new Date(values.fodselsdatoFra);
+    const til = new Date(values.fodselsdatoTil);
     if (fra > til) {
         fodselsdatoFra = 'Fra-dato kan ikke være senere enn til-dato';
     }
-    if (til > new Date()) {
+    if (til > new Date(Date.now())) {
         fodselsdatoTil = 'Du kan ikke velge dato frem i tid';
     }
     const alderFra = !erTall(values.alderFra) ? 'Alder må være tall' : undefined;

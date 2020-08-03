@@ -8,8 +8,9 @@ import DescriptionList, {
 import YtelserInfoGruppe from '../felles-styling/YtelserInfoGruppe';
 import styled from 'styled-components/macro';
 import theme from '../../../../../styles/personOversiktTheme';
-import { datoEllerNull, formaterDato, prosentEllerNull } from '../../../../../utils/string-utils';
+import { datoEllerNull, prosentEllerNull } from '../../../../../utils/string-utils';
 import ArbeidsForholdListe from '../arbeidsforhold/ArbeidsforholdListe';
+import { formaterDato } from '../../../../../utils/date-utils';
 
 interface Props {
     foreldrePenger: Foreldrepengerettighet;

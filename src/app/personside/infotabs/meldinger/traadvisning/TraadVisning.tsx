@@ -1,6 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
-import { datoSynkende, formatterDatoMedMaanedsnavn, formatterDatoTid } from '../../../../../utils/date-utils';
+import {
+    datoSynkende,
+    formaterDato,
+    formaterDatoMedMaanedsnavn,
+    formaterDatoTid
+} from '../../../../../utils/date-utils';
 import EnkeltMelding from './Enkeltmelding';
 import theme from '../../../../../styles/personOversiktTheme';
 import { useDispatch } from 'react-redux';
@@ -11,7 +16,6 @@ import { toggleDialogpanel } from '../../../../../redux/uiReducers/UIReducer';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { Meldingstype, Traad } from '../../../../../models/meldinger/meldinger';
 import { eldsteMelding, meldingstittel, nyesteMelding, saksbehandlerTekst } from '../utils/meldingerUtils';
-import { formaterDato } from '../../../../../utils/string-utils';
 import { loggEvent } from '../../../../../utils/logger/frontendLogger';
 import { Printer } from '../../../../../utils/print/usePrinter';
 
@@ -62,7 +66,7 @@ function Topplinje({ valgtTraad }: { valgtTraad: Traad }) {
         return (
             <AlertStripeInfo>
                 Henvendelsen er avsluttet uten å svare bruker av {saksbehandlerTekst(melding.ferdigstiltUtenSvarAv)}{' '}
-                {melding.ferdigstiltUtenSvarDato && formatterDatoMedMaanedsnavn(melding.ferdigstiltUtenSvarDato)}
+                {melding.ferdigstiltUtenSvarDato && formaterDatoMedMaanedsnavn(melding.ferdigstiltUtenSvarDato)}
             </AlertStripeInfo>
         );
     }
@@ -108,7 +112,7 @@ function TraadVisning(props: Props) {
         <VisningStyle>
             <Topplinje valgtTraad={props.valgtTraad} />
             <h3 className="sr-only" aria-live="polite">
-                {meldingstittel(sisteMelding)} {formatterDatoTid(sisteMelding.opprettetDato)}
+                {meldingstittel(sisteMelding)} {formaterDatoTid(sisteMelding.opprettetDato)}
             </h3>
             <AlleMeldinger sokeord={props.sokeord} traad={props.valgtTraad} />
         </VisningStyle>

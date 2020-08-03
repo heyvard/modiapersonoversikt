@@ -1,7 +1,7 @@
 import * as React from 'react';
 import VisittkortElement from '../../VisittkortElement';
 import { KRRKontaktinformasjon } from '../../../../../../models/kontaktinformasjon';
-import { formaterDato } from '../../../../../../utils/string-utils';
+import { formaterDato } from '../../../../../../utils/date-utils';
 import EtikettGrå from '../../../../../../components/EtikettGrå';
 import EmailIkon from '../../../../../../svg/Email';
 import { Normaltekst } from 'nav-frontend-typografi';

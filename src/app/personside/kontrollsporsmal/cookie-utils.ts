@@ -1,12 +1,10 @@
-import moment from 'moment';
 import * as Cookies from 'js-cookie';
 
 const kontrollSpmErLukketForBrukerCookieNavn = 'KontrollSpmErLukketForBruker';
 
 export function settSkjulKontrollspørsmålPåTversAvVinduerForBrukerCookie(fnr: string) {
-    const omEnTime = moment()
-        .add(1, 'hour')
-        .toDate();
+    const omEnTime = new Date(Date.now());
+    omEnTime.setHours(omEnTime.getHours() + 1);
     Cookies.set(kontrollSpmErLukketForBrukerCookieNavn, fnr, { expires: omEnTime });
 }
 

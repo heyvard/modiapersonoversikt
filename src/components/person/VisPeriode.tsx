@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Periode } from '../../models/tid';
-import { formaterDato } from '../../utils/string-utils';
+import { formaterDato } from '../../utils/date-utils';
 import EtikettGrå from '../EtikettGrå';
 
 interface Props {

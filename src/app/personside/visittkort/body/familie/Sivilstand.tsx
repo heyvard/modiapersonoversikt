@@ -1,5 +1,4 @@
 import * as React from 'react';
-import moment from 'moment';
 import { Normaltekst } from 'nav-frontend-typografi';
 import VisittkortElement from '../VisittkortElement';
 import {
@@ -13,6 +12,7 @@ import NavnOgAlder from '../../../../../components/person/NavnOgAlder';
 import BorMedBruker from '../../../../../components/person/HarSammeBosted';
 import HeartIkon from '../../../../../svg/Heart';
 import { Diskresjonskode } from './common/Diskresjonskode';
+import { formaterDato } from '../../../../../utils/date-utils';
 
 interface Props {
     person: Person;
@@ -27,7 +27,7 @@ function Sivilstand(props: { sivilstand: SivilstandInterface }) {
     if (props.sivilstand.kodeRef === SivilstandTyper.Ugift) {
         return <>{props.sivilstand.beskrivelse}</>;
     }
-    const relasjonFraOgMed = moment(props.sivilstand.fraOgMed).format('DD.MM.YYYY');
+    const relasjonFraOgMed = formaterDato(props.sivilstand.fraOgMed);
     const nullDatoFraTPS = '01.01.9999';
 
     if (relasjonFraOgMed !== nullDatoFraTPS) {

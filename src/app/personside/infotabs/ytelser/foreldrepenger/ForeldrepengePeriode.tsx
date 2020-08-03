@@ -5,16 +5,12 @@ import DescriptionList, {
     fjernEntriesUtenVerdi
 } from '../../../../../components/DescriptionList';
 import YtelserPeriode from '../felles-styling/YtelserPeriode';
-import {
-    convertBoolTilJaNei,
-    formaterDato,
-    periodeEllerNull,
-    prosentEllerNull
-} from '../../../../../utils/string-utils';
+import { convertBoolTilJaNei, periodeEllerNull, prosentEllerNull } from '../../../../../utils/string-utils';
 import KommendeUtbetalinger from '../utbetalinger/kommendeUtbetalinger/KommendeUtbetalinger';
 import YtelserInfoGruppe from '../felles-styling/YtelserInfoGruppe';
 import styled from 'styled-components/macro';
 import theme from '../../../../../styles/personOversiktTheme';
+import { formaterDato } from '../../../../../utils/date-utils';
 
 interface Props {
     periode: Foreldrepengerperiode;

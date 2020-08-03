@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import { Normaltekst } from 'nav-frontend-typografi';
 import theme from '../../../styles/personOversiktTheme';
 import EtikettGrå from '../../../components/EtikettGrå';
-import { formatterDatoTid } from '../../../utils/date-utils';
+import { formaterDatoTid } from '../../../utils/date-utils';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import Tekstomrade from 'nav-frontend-tekstomrade';
 import { useSendtMelding } from './useSendtMelding';
@@ -31,7 +31,7 @@ function Preview(props: Props) {
 
     let opprettetDato = null;
     if (sendtMelding.melding) {
-        opprettetDato = <EtikettGrå>{formatterDatoTid(sendtMelding.melding.opprettetDato)}</EtikettGrå>;
+        opprettetDato = <EtikettGrå>{formaterDatoTid(sendtMelding.melding.opprettetDato)}</EtikettGrå>;
     } else if (props.meldingstatus !== SendNyMeldingStatus.ERROR) {
         opprettetDato = <NavFrontendSpinner type="XXS" />;
     }

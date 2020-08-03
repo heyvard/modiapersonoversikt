@@ -1,16 +1,14 @@
-import moment from 'moment';
-
 import navfaker from 'nav-faker';
-
 import { tilfeldigFodselsnummer } from '../../../utils/fnr-utils';
 import { getPersonstatus } from '../../personMock';
 import { lagNavn, getAlderFromFødselsnummer } from '../../../utils/person-utils';
 import { Familierelasjon, Relasjonstype } from '../../../../models/person/person';
+import { antallArSiden } from '../../../../utils/date-utils';
 
 export function mockBarn(foreldresFødselsnummer: string) {
     navfaker.seed(foreldresFødselsnummer);
     const foreldresFødseldato = navfaker.personIdentifikator.getFødselsdato(foreldresFødselsnummer);
-    const alder = moment().diff(foreldresFødseldato, 'years');
+    const alder = antallArSiden(foreldresFødseldato);
     const antallBarn = kalkulerAntallBarn(alder);
 
     let barn = [];

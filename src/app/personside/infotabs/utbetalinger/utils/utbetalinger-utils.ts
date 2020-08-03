@@ -1,10 +1,8 @@
 import { Skatt, Trekk, Utbetaling, Ytelse, Ytelseskomponent } from '../../../../../models/utbetalinger';
-import { formaterDato } from '../../../../../utils/string-utils';
 import { Periode } from '../../../../../models/tid';
-import moment from 'moment';
 import { loggError } from '../../../../../utils/logger/frontendLogger';
 import { UtbetalingFilterState, PeriodeValg } from '../../../../../redux/utbetalinger/types';
-import { datoVerbose } from '../../../../../utils/date-utils';
+import { datoVerbose, formaterDato, unix } from '../../../../../utils/date-utils';
 
 export const utbetaltTilBruker = 'Bruker';
 
@@ -14,7 +12,7 @@ export function månedOgÅrForUtbetaling(utbetaling: Utbetaling) {
 }
 
 export function utbetalingDatoComparator(a: Utbetaling, b: Utbetaling) {
-    return moment(getGjeldendeDatoForUtbetaling(b)).unix() - moment(getGjeldendeDatoForUtbetaling(a)).unix();
+    return unix(getGjeldendeDatoForUtbetaling(b)) - unix(getGjeldendeDatoForUtbetaling(a));
 }
 
 export function ytelseBelopDescComparator(a: Ytelseskomponent, b: Ytelseskomponent) {
@@ -30,29 +28,29 @@ export function trekkBelopAscComparator(a: Trekk, b: Trekk) {
 }
 
 export function getUtbetalingerForSiste30DagerDatoer() {
-    return {
-        fra: moment()
-            .subtract(30, 'day')
-            .startOf('day')
-            .toDate(),
-        til: moment()
-            .add(100, 'day')
-            .endOf('day')
-            .toDate()
-    };
+    const fra = new Date(Date.now());
+    fra.setDate(fra.getDate() - 30);
+    fra.setHours(0, 0, 0, 0);
+    const til = new Date(Date.now());
+    til.setDate(til.getDate() + 100);
+    til.setHours(23, 59, 59, 999);
+
+    return { fra, til };
 }
 
 export function getFraDateFromFilter(filter: UtbetalingFilterState): Date {
     switch (filter.periode.radioValg) {
         case PeriodeValg.INNEVÆRENDE_ÅR:
-            return moment()
-                .startOf('year')
-                .toDate();
+            const iar = new Date(Date.now());
+            iar.setMonth(0, 1);
+            iar.setHours(0, 0, 0, 0);
+            return iar;
         case PeriodeValg.I_FJOR:
-            return moment()
-                .subtract(1, 'year')
-                .startOf('year')
-                .toDate();
+            const ifjor = new Date(Date.now());
+            ifjor.setFullYear(ifjor.getFullYear() - 1);
+            ifjor.setMonth(0, 1);
+            ifjor.setHours(0, 0, 0, 0);
+            return ifjor;
         case PeriodeValg.EGENDEFINERT:
             return filter.periode.egendefinertPeriode.fra;
         case PeriodeValg.SISTE_30_DAGER:
@@ -64,10 +62,11 @@ export function getFraDateFromFilter(filter: UtbetalingFilterState): Date {
 export function getTilDateFromFilter(filter: UtbetalingFilterState): Date {
     switch (filter.periode.radioValg) {
         case PeriodeValg.I_FJOR:
-            return moment()
-                .subtract(1, 'year')
-                .endOf('year')
-                .toDate();
+            const ifjor = new Date(Date.now());
+            ifjor.setFullYear(ifjor.getFullYear() - 1);
+            ifjor.setMonth(11, 31);
+            ifjor.setHours(23, 59, 59, 999);
+            return ifjor;
         case PeriodeValg.EGENDEFINERT:
             return filter.periode.egendefinertPeriode.til;
         case PeriodeValg.INNEVÆRENDE_ÅR:
@@ -157,14 +156,15 @@ export function getPeriodeFromYtelser(ytelser: Ytelse[]): Periode {
             if (!ytelse.periode) {
                 return acc;
             }
+
             return {
-                fra: moment(ytelse.periode.start).isBefore(moment(acc.fra)) ? ytelse.periode.start : acc.fra,
-                til: moment(ytelse.periode.slutt).isAfter(moment(acc.til)) ? ytelse.periode.slutt : acc.til
+                fra: new Date(ytelse.periode.start) < new Date(acc.fra) ? ytelse.periode.start : acc.fra,
+                til: new Date(ytelse.periode.slutt) >= new Date(acc.til) ? ytelse.periode.slutt : acc.til
             };
         },
         {
-            fra: moment().format(),
-            til: moment(0).format()
+            fra: new Date(8640000000000000).toISOString(),
+            til: new Date(-8640000000000000).toISOString()
         }
     );
 }

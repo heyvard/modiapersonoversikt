@@ -1,6 +1,4 @@
 import faker from 'faker/locale/nb_NO';
-import moment from 'moment';
-
 import navfaker from 'nav-faker/dist/index';
 
 import {
@@ -46,9 +44,9 @@ function getUtbetalinger(fødselsnummer: string) {
 }
 
 function randomDato(seededFaker: Faker.FakerStatic) {
-    return moment(seededFaker.date.past(1.5))
-        .startOf('day')
-        .format(backendDatoformat);
+    const dato = seededFaker.date.past(1.5);
+    dato.setHours(0, 0, 0, 0);
+    return backendDatoformat(dato);
 }
 
 export function getMockUtbetaling(fødselsnummer?: string): Utbetaling {

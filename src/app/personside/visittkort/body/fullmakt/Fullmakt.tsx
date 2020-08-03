@@ -4,7 +4,7 @@ import VisittkortElement from '../VisittkortElement';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { VisittkortGruppe } from '../VisittkortStyles';
 import Fullmaktlogo from '../../../../../svg/Utropstegn';
-import { formaterDato } from '../../../../../utils/string-utils';
+import { formaterDato } from '../../../../../utils/date-utils';
 
 function getOmraade(omraader: string[]): string {
     if (omraader.includes('*')) {

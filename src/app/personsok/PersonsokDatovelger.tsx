@@ -8,7 +8,6 @@ import useBoundingRect from '../../utils/hooks/use-bounding-rect';
 import { PersonSokFormState } from './personsok-utils';
 import { FieldState, Mapped, Values } from '@nutgaard/use-formstate';
 import { SkjemaelementFeilmelding } from 'nav-frontend-skjema';
-import moment from 'moment';
 import { DatovelgerAvgrensninger } from 'nav-datovelger';
 
 const DatovelgerStyle = styled.div<{ top: number; left: number }>`
@@ -72,7 +71,7 @@ function getDatoFeilmelding(fra: Date, til: Date) {
     if (fra > til) {
         return <SkjemaelementFeilmelding>Fra-dato kan ikke være senere enn til-dato</SkjemaelementFeilmelding>;
     }
-    if (til > new Date()) {
+    if (til > new Date(Date.now())) {
         return <SkjemaelementFeilmelding>Du kan ikke velge dato frem i tid</SkjemaelementFeilmelding>;
     }
     return null;
@@ -86,8 +85,8 @@ function PersonsokDatovelger(props: { form: Mapped<Values<PersonSokFormState>, F
     const dropdownFraCoordinate = beregnDropdownCoordinate(datovelgerFraRect);
     const dropdownTilCoordinate = beregnDropdownCoordinate(datovelgerTilRect);
     const datoFeilmelding = getDatoFeilmelding(
-        moment(props.form.fodselsdatoFra.input.value).toDate(),
-        moment(props.form.fodselsdatoTil.input.value).toDate()
+        new Date(props.form.fodselsdatoFra.input.value),
+        new Date(props.form.fodselsdatoTil.input.value)
     );
     const avgrensninger = { minDato: props.form.fodselsdatoFra.input.value };
     return (

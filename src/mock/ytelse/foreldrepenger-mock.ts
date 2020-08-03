@@ -1,8 +1,5 @@
 import faker from 'faker/locale/nb_NO';
-import moment from 'moment';
-
 import navfaker from 'nav-faker/dist/index';
-
 import {
     Foreldrepengerperiode,
     ForeldrepengerResponse,
@@ -48,23 +45,23 @@ export function getForeldrepengerettighetMock(fødselsnummer: string, seed?: num
         forelder: fødselsnummer,
         andreForeldersFnr: navfaker.personIdentifikator.fødselsnummer(),
         antallBarn: navfaker.random.integer(5),
-        barnetsFødselsdato: moment(faker.date.recent()).format(backendDatoformat),
+        barnetsFødselsdato: backendDatoformat(faker.date.recent()),
         dekningsgrad: navfaker.random.integer(95),
-        fedrekvoteTom: vektetSjanse(faker, 0.5) ? moment(faker.date.recent()).format(backendDatoformat) : null,
-        mødrekvoteTom: vektetSjanse(faker, 0.5) ? moment(faker.date.recent()).format(backendDatoformat) : null,
+        fedrekvoteTom: vektetSjanse(faker, 0.5) ? backendDatoformat(faker.date.recent()) : null,
+        mødrekvoteTom: vektetSjanse(faker, 0.5) ? backendDatoformat(faker.date.recent()) : null,
         foreldrepengetype: foreldrePengeType(),
         graderingsdager: navfaker.random.integer(100),
         restDager: navfaker.random.integer(50),
-        rettighetFom: vektetSjanse(faker, 0.5) ? moment(faker.date.past(2)).format(backendDatoformat) : null,
-        eldsteIdDato: vektetSjanse(faker, 0.5) ? moment(faker.date.past(2)).format(backendDatoformat) : null,
+        rettighetFom: vektetSjanse(faker, 0.5) ? backendDatoformat(faker.date.past(2)) : null,
+        eldsteIdDato: vektetSjanse(faker, 0.5) ? backendDatoformat(faker.date.past(2)) : null,
         foreldreAvSammeKjønn: vektetSjanse(faker, 0.5) ? 'Begge er pappaer' : null,
         periode: fyllRandomListe<Foreldrepengerperiode>(() => getForeldrepengerperiodeMock(fødselsnummer), 5),
-        slutt: vektetSjanse(faker, 0.5) ? moment(faker.date.recent()).format(backendDatoformat) : null,
+        slutt: vektetSjanse(faker, 0.5) ? backendDatoformat(faker.date.recent()) : null,
         arbeidsforhold: fyllRandomListe<Arbeidsforhold>(() => getArbeidsforholdMock(fødselsnummer), 5),
         erArbeidsgiverperiode: vektetSjanse(faker, 0.5) ? faker.random.boolean() : null,
         arbeidskategori: vektetSjanse(faker, 0.5) ? 'Arbeidstaker' : null,
-        omsorgsovertakelse: !erFødsel ? moment(faker.date.past(2)).format(backendDatoformat) : undefined,
-        termin: erFødsel ? moment(faker.date.recent()).format(backendDatoformat) : undefined
+        omsorgsovertakelse: !erFødsel ? backendDatoformat(faker.date.past(2)) : undefined,
+        termin: erFødsel ? backendDatoformat(faker.date.recent()) : undefined
     } as Foreldrepengerettighet;
 }
 
@@ -83,8 +80,8 @@ export function getForeldrepengerperiodeMock(fødselsnummer: string): Foreldrepe
         forskyvelsesperiode1: vektetSjanse(faker, 0.5) ? getPeriode() : null,
         forskyvelsesårsak2: vektetSjanse(faker, 0.5) ? 'FÅRSAK2' : null,
         forskyvelsesperiode2: vektetSjanse(faker, 0.5) ? getPeriode() : null,
-        foreldrepengerFom: moment(faker.date.past(5)).format(backendDatoformat),
-        midlertidigStansDato: vektetSjanse(faker, 0.5) ? moment(faker.date.recent()).format(backendDatoformat) : null,
+        foreldrepengerFom: backendDatoformat(faker.date.past(5)),
+        midlertidigStansDato: vektetSjanse(faker, 0.5) ? backendDatoformat(faker.date.recent()) : null,
         morSituasjon: vektetSjanse(faker, 0.5) ? faker.lorem.words(5) : null,
         rettTilFedrekvote: vektetSjanse(faker, 0.5) ? 'Rett til fedrekvote' : 'Ingen rett til fedrekvote',
         rettTilMødrekvote: vektetSjanse(faker, 0.5) ? 'Rett til mødrekvote' : 'Ingen rett til mødrekvote',
@@ -99,8 +96,8 @@ function getArbeidsforholdMock(fødselsnummer: string): Arbeidsforhold {
         arbeidsgiverKontonr: Number(faker.finance.account(11)).toString(),
         inntektsperiode: vektetSjanse(faker, 0.5) ? 'Månedlig' : 'Årlig',
         inntektForPerioden: Math.round(Number(faker.finance.amount(5000, 50000))),
-        sykepengerFom: vektetSjanse(faker, 0.5) ? moment(faker.date.recent()).format(backendDatoformat) : null,
-        refusjonTom: vektetSjanse(faker, 0.5) ? moment(faker.date.recent()).format(backendDatoformat) : null,
+        sykepengerFom: vektetSjanse(faker, 0.5) ? backendDatoformat(faker.date.recent()) : null,
+        refusjonTom: vektetSjanse(faker, 0.5) ? backendDatoformat(faker.date.recent()) : null,
         refusjonstype: 'Ikke refusjon'
     };
 }

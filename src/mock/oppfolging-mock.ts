@@ -11,7 +11,6 @@ import {
 } from '../models/oppfolging';
 import { fyllRandomListe } from './utils/mock-utils';
 import navfaker from 'nav-faker';
-import moment from 'moment';
 import { backendDatoformat } from '../utils/date-utils';
 
 export function getMockOppfølging(fødselsnummer: string): Oppfolging {
@@ -49,9 +48,9 @@ export function getMockYtelserOgKontrakter(fødselsnummer: string): DetaljertOpp
         meldeplikt: faker.random.boolean(),
         formidlingsgruppe: 'FMGRP' + faker.random.number(5),
         innsatsgruppe: 'INGRP' + faker.random.number(10),
-        sykemeldtFra: moment(faker.date.recent(10)).format(backendDatoformat),
+        sykemeldtFra: backendDatoformat(faker.date.recent(10)),
         rettighetsgruppe: 'RGRP' + faker.random.number(10),
-        vedtaksdato: moment(faker.date.recent(10)).format(backendDatoformat),
+        vedtaksdato: backendDatoformat(faker.date.recent(10)),
         sykefraværsoppfølging: fyllRandomListe(getSyfoPunkt, 5),
         ytelser: fyllRandomListe(() => navfaker.random.arrayElement([getYtelse(), getDagpenger()]), 4)
     };
@@ -59,7 +58,7 @@ export function getMockYtelserOgKontrakter(fødselsnummer: string): DetaljertOpp
 
 function getSyfoPunkt(): SyfoPunkt {
     return {
-        dato: moment(faker.date.recent(100)).format(backendDatoformat),
+        dato: backendDatoformat(faker.date.recent(100)),
         fastOppfølgingspunkt: faker.random.boolean(),
         status: 'Ferdig behandlet',
         syfoHendelse: faker.lorem.words(6)
@@ -68,9 +67,9 @@ function getSyfoPunkt(): SyfoPunkt {
 
 function getYtelse(): OppfolgingsYtelse {
     return {
-        datoKravMottatt: moment(faker.date.recent(30)).format(backendDatoformat),
-        fom: moment(faker.date.recent(20)).format(backendDatoformat),
-        tom: moment(faker.date.recent(10)).format(backendDatoformat),
+        datoKravMottatt: backendDatoformat(faker.date.recent(30)),
+        fom: backendDatoformat(faker.date.recent(20)),
+        tom: backendDatoformat(faker.date.recent(10)),
         status: navfaker.random.arrayElement(['Aktiv', 'Avsluttet']),
         type: navfaker.random.arrayElement(['Arbeidsavklaringspenger', 'Individstønad']),
         vedtak: Array(navfaker.random.integer(5, 1))
@@ -94,8 +93,8 @@ function getDagpenger(): Dagpenger {
 
 function getVedtak(): OppfolgingsVedtak {
     return {
-        aktivFra: moment(faker.date.recent(40)).format(backendDatoformat),
-        aktivTil: moment(faker.date.recent(20)).format(backendDatoformat),
+        aktivFra: backendDatoformat(faker.date.recent(40)),
+        aktivTil: backendDatoformat(faker.date.recent(20)),
         aktivitetsfase: 'Ikke spesif. aktivitetsfase',
         vedtakstatus: navfaker.random.arrayElement(['Iverksatt', 'Avsluttet']),
         vedtakstype: 'Ordinære dagpenger'

@@ -3,11 +3,11 @@ import styled from 'styled-components/macro';
 import { Normaltekst } from 'nav-frontend-typografi';
 
 import { BostatusTyper, Person } from '../../../../../models/person/person';
-import { formaterDato } from '../../../../../utils/string-utils';
 import Statsborgerskap from './Statsborgerskap';
 import { Sivilstand } from './Sivilstand';
 import { AntallBarn } from './Antallbarn';
 import CopyToClipboard from './CopyToClipboard';
+import { formaterDato } from '../../../../../utils/date-utils';
 
 const PersonStatusListe = styled.ul`
     margin: 0;

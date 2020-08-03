@@ -1,5 +1,4 @@
 import { UtbetalingPåVent } from '../../../../../../models/ytelse/ytelse-utbetalinger';
-import moment from 'moment';
 import { Periode } from '../../../../../../models/tid';
 
 export function utledUtbetalingPåVentÅrsak(utbetaling: UtbetalingPåVent): string {
@@ -23,9 +22,9 @@ export function utledUtbetalingPåVentÅrsak(utbetaling: UtbetalingPåVent): str
 
 function utbetalingPåVentPgaSanksjon({ vedtak, sanksjon }: UtbetalingPåVent): boolean {
     if (sanksjon && vedtak && vedtak.til) {
-        const sanksjonInnenforVedtaksperiode = moment(sanksjon.fra).isSameOrBefore(moment(vedtak.til));
+        const sanksjonInnenforVedtaksperiode = new Date(sanksjon.fra) <= new Date(vedtak.til);
         const sanksjonUtenSlutt = sanksjonInnenforVedtaksperiode && !sanksjon.til;
-        const sanksjonFremdelesGjeldende = !!sanksjon.til && moment(sanksjon.til).isSameOrAfter(moment(vedtak.til));
+        const sanksjonFremdelesGjeldende = !!sanksjon.til && new Date(sanksjon.til) >= new Date(vedtak.til);
         return sanksjonUtenSlutt || sanksjonFremdelesGjeldende;
     }
     return false;
@@ -33,7 +32,7 @@ function utbetalingPåVentPgaSanksjon({ vedtak, sanksjon }: UtbetalingPåVent): 
 
 function erPåVentFordiSykemeldingMangler({ vedtak, sykmeldt }: UtbetalingPåVent): boolean {
     if (vedtak && sykmeldt && vedtak.til && sykmeldt.til) {
-        return moment(vedtak.til).isSameOrAfter(moment(sykmeldt.til));
+        return new Date(vedtak.til) >= new Date(sykmeldt.til);
     }
     return false;
 }
@@ -46,5 +45,5 @@ function erPåVentGrunnetFerie({ vedtak, ferie1, ferie2 }: UtbetalingPåVent): b
 }
 
 function ferieEtterVedtakTom(ferie: Periode | null, vedtakTil: string): boolean {
-    return !!ferie && moment(vedtakTil).isSameOrBefore(moment(ferie.til));
+    return !!ferie && new Date(vedtakTil) <= new Date(ferie.til);
 }

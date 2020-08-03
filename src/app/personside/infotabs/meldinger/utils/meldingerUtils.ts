@@ -1,6 +1,6 @@
 import { Melding, Meldingstype, Saksbehandler, Traad } from '../../../../../models/meldinger/meldinger';
 import { meldingstypeTekst } from './meldingstekster';
-import { datoStigende, datoSynkende, formatterDatoTid } from '../../../../../utils/date-utils';
+import { datoStigende, datoSynkende, formaterDatoTid } from '../../../../../utils/date-utils';
 import { useMemo } from 'react';
 import useDebounce from '../../../../../utils/hooks/use-debounce';
 import { Temagruppe, temagruppeTekst, TemaPlukkbare, TemaKommunaleTjenester } from '../../../../../models/temagrupper';
@@ -188,5 +188,5 @@ export function erSammefritekstSomIMelding(fritekst: string, melding: Melding): 
 }
 
 export function getFormattertMeldingsDato(melding: Melding) {
-    return formatterDatoTid(melding?.ferdigstiltDato || melding.opprettetDato);
+    return formaterDatoTid(melding?.ferdigstiltDato || melding.opprettetDato);
 }

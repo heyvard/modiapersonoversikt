@@ -13,9 +13,8 @@ import { settValgtPeriode } from '../../../../redux/oppfolging/actions';
 import { connect } from 'react-redux';
 import { reloadOppfolingActionCreator } from '../../../../redux/restReducers/oppfolging';
 import { DatovelgerAvgrensninger } from 'nav-datovelger';
-import { formaterDato, formaterTilISO8601Date } from '../../../../utils/string-utils';
-import moment from 'moment';
-import { isValidDate } from '../../../../utils/date-utils';
+import { formaterTilISO8601Date } from '../../../../utils/string-utils';
+import { formaterDato, isValidDate } from '../../../../utils/date-utils';
 import { loggEvent } from '../../../../utils/logger/frontendLogger';
 import { useRef } from 'react';
 import { guid } from 'nav-frontend-js-utils';
@@ -53,17 +52,19 @@ interface DispatchProps {
 
 type Props = DispatchProps & StateProps;
 
-const tidligsteDato = () =>
-    moment()
-        .subtract(10, 'year')
-        .startOf('day')
-        .toDate();
+const tidligsteDato = () => {
+    const dato = new Date(Date.now());
+    dato.setFullYear(dato.getFullYear() - 10);
+    dato.setHours(0, 0, 0, 0);
+    return dato;
+};
 
-const senesteDato = () =>
-    moment()
-        .add(1, 'year')
-        .endOf('day')
-        .toDate();
+const senesteDato = () => {
+    const dato = new Date(Date.now());
+    dato.setFullYear(dato.getFullYear() + 1);
+    dato.setHours(23, 59, 59, 999);
+    return dato;
+};
 
 function getDatoFeilmelding(fra: Date, til: Date) {
     if (fra > til) {
@@ -114,7 +115,7 @@ function DatoInputs(props: Props) {
                 input={{ id: 'oppfolging-datovelger-fra', name: 'Fra dato' }}
                 visÅrVelger={true}
                 valgtDato={formaterTilISO8601Date(fra)}
-                onChange={dato => props.settValgtPeriode({ fra: moment(dato).toDate() })}
+                onChange={dato => props.settValgtPeriode({ fra: new Date(dato) })}
                 id="oppfolging-datovelger-fra"
                 avgrensninger={avgrensninger}
             />
@@ -123,7 +124,7 @@ function DatoInputs(props: Props) {
                 input={{ id: 'oppfolging-datovelger-til', name: 'Til dato' }}
                 visÅrVelger={true}
                 valgtDato={formaterTilISO8601Date(til)}
-                onChange={dato => props.settValgtPeriode({ til: moment(dato).toDate() })}
+                onChange={dato => props.settValgtPeriode({ til: new Date(dato) })}
                 id="oppfolging-datovelger-til"
                 avgrensninger={avgrensninger}
             />

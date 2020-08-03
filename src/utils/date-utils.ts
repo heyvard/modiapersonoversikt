@@ -1,8 +1,5 @@
 import { loggError } from './logger/frontendLogger';
 
-export const backendDatoformat: string = 'YYYY-MM-DD';
-export const backendDatoTidformat: string = 'YYYY-MM-DD HH:mm';
-
 const locale = 'nb-NO';
 const dateLocaleOptions: Intl.DateTimeFormatOptions = {
     month: '2-digit',
@@ -21,32 +18,40 @@ const DATO_FORMAT = new Intl.DateTimeFormat(locale, dateLocaleOptions);
 const DATO_FORMAT_MANEDSNAVN = new Intl.DateTimeFormat(locale, { ...dateLocaleOptions, month: 'long' });
 const DATO_TID_FORMAT = new Intl.DateTimeFormat(locale, timeLocaleOptions);
 const DATO_TID_MANEDSNANV_FORMAT = new Intl.DateTimeFormat(locale, { ...timeLocaleOptions, month: 'long' });
+const BARE_MANED = new Intl.DateTimeFormat(locale, { month: 'long' });
 
-function asDate(dato?: string | Date): Date {
-    if (!dato) {
-        return new Date();
-    }
+export function asDate(dato: string | Date): Date {
     if (dato instanceof Date) {
         return dato;
     }
     return new Date(dato);
 }
 
-export function formatterDato(dato: string | Date) {
+export function formaterDato(dato: string | Date) {
     return DATO_FORMAT.format(asDate(dato));
 }
 
-export function formatterDatoMedMaanedsnavn(dato: string | Date) {
-    return DATO_FORMAT_MANEDSNAVN.format(asDate(dato));
+export function formaterDatoMedMaanedsnavn(datoStr: string | Date) {
+    const dato = asDate(datoStr);
+    return fiksKortformAvManed(dato, DATO_FORMAT_MANEDSNAVN.format(dato));
 }
 
-export function formatterDatoTid(dato: string | Date) {
-    return DATO_TID_FORMAT.format(asDate(dato));
+export function formaterDatoTid(dato: string | Date) {
+    return DATO_TID_FORMAT.format(asDate(dato)).replace(',', '');
 }
 
-export function formatterDatoTidMedMaanedsnavn(dato: string | Date) {
-    return DATO_TID_MANEDSNANV_FORMAT.format(asDate(dato));
+export function formaterDatoTidMedMaanedsnavn(datoStr: string | Date) {
+    const dato = asDate(datoStr);
+    return fiksKortformAvManed(dato, DATO_TID_MANEDSNANV_FORMAT.format(dato)).replace(',', '');
 }
+
+const fiksKortformAvManed = (dato: Date, value: string): string => {
+    const maned = BARE_MANED.format(dato);
+    if (maned.length <= 4) {
+        return value;
+    }
+    return value.replace(maned, `${maned.substring(0, 3)}.`);
+};
 
 const maneder = [
     'Januar',
@@ -69,7 +74,7 @@ const manedTilNavnMapping = (manednr: number) => {
     return maneder[manednr];
 };
 
-export function datoVerbose(dato?: string | Date) {
+export function datoVerbose(dato: string | Date) {
     const datoMoment = asDate(dato);
     const maned = manedTilNavnMapping(datoMoment.getMonth());
     const ar = datoMoment.getFullYear();
@@ -94,7 +99,7 @@ export function isValidDate(date: string | Date) {
 
 export function erMaks10MinSiden(datoStr: string | Date) {
     const dato = asDate(datoStr);
-    const now = new Date().getTime();
+    const now = new Date(Date.now()).getTime();
     const tiMinutterSiden = new Date(now - 10 * 60 * 1000);
 
     return dato > tiMinutterSiden;
@@ -102,7 +107,7 @@ export function erMaks10MinSiden(datoStr: string | Date) {
 
 export function erMaksEttÅrFramITid(datoStr: Date) {
     const dato = asDate(datoStr);
-    const ettArIFremtiden = new Date();
+    const ettArIFremtiden = new Date(Date.now());
     ettArIFremtiden.setFullYear(ettArIFremtiden.getFullYear() + 1);
 
     return dato <= ettArIFremtiden;
@@ -131,4 +136,37 @@ export function datoStigende<T>(getDate: (element: T) => Date | string) {
 
 export function datoSynkende<T>(getDate: (element: T) => Date | string) {
     return (a: T, b: T): number => -ascendingDateComparator(getDate(a), getDate(b));
+}
+
+export function antallArSiden(date: Date, now: Date = new Date(Date.now())): number {
+    return new Date(now.getTime() - date.getTime()).getFullYear() - 1970;
+}
+
+export function copy(date: Date): Date {
+    return new Date(asDate(date).getTime());
+}
+
+export function backendDatoformat(dateStr: string | Date): string {
+    const date = asDate(dateStr);
+    return [
+        date.getFullYear(),
+        ('' + (date.getMonth() + 1)).padStart(2, '0'),
+        ('' + date.getDate()).padStart(2, '0')
+    ].join('-');
+}
+
+export function backendDatoTidformat(dateStr: string | Date): string {
+    const date = asDate(dateStr);
+    const datepart = [
+        date.getFullYear(),
+        ('' + (date.getMonth() + 1)).padStart(2, '0'),
+        ('' + date.getDate()).padStart(2, '0')
+    ].join('-');
+
+    const timepart = [('' + date.getHours()).padStart(2, '0'), ('' + date.getMinutes()).padStart(2, '0')].join(':');
+    return datepart + ' ' + timepart;
+}
+
+export function unix(date: string | Date): number {
+    return Math.floor(asDate(date).getTime() / 1000);
 }

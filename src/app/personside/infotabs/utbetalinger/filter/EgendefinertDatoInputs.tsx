@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { UtbetalingFilterState, FraTilDato } from '../../../../../redux/utbetalinger/types';
-import { formaterDato, formaterTilISO8601Date } from '../../../../../utils/string-utils';
+import { formaterTilISO8601Date } from '../../../../../utils/string-utils';
 import { DatovelgerAvgrensninger } from 'nav-datovelger';
-import moment from 'moment';
 import Datovelger from 'nav-datovelger/dist/datovelger/Datovelger';
 import { tidligsteTilgjengeligeDatoUtbetalingerRestkonto } from '../../../../../redux/restReducers/utbetalinger';
 import { Periode } from '../../../../../models/tid';
-import { isValidDate } from '../../../../../utils/date-utils';
+import { formaterDato, isValidDate } from '../../../../../utils/date-utils';
 import { SkjemaelementFeilmelding } from 'nav-frontend-skjema';
 
 interface Props {
@@ -16,8 +15,8 @@ interface Props {
 
 function onDatoChange(props: Props, dato: Partial<Periode>) {
     const newPeriode: FraTilDato = {
-        fra: dato.fra ? moment(dato.fra).toDate() : props.filter.periode.egendefinertPeriode.fra,
-        til: dato.til ? moment(dato.til).toDate() : props.filter.periode.egendefinertPeriode.til
+        fra: dato.fra ? new Date(dato.fra) : props.filter.periode.egendefinertPeriode.fra,
+        til: dato.til ? new Date(dato.til) : props.filter.periode.egendefinertPeriode.til
     };
     props.updateFilter({
         periode: {
@@ -31,7 +30,7 @@ function getDatoFeilmelding(fra: Date, til: Date) {
     if (fra > til) {
         return <SkjemaelementFeilmelding>Fra-dato kan ikke være senere enn til-dato</SkjemaelementFeilmelding>;
     }
-    if (til > new Date()) {
+    if (til > new Date(Date.now())) {
         return <SkjemaelementFeilmelding>Du kan ikke velge dato frem i tid</SkjemaelementFeilmelding>;
     }
     if (fra < tidligsteTilgjengeligeDatoUtbetalingerRestkonto) {
@@ -53,7 +52,7 @@ function EgendefinertDatoInputs(props: Props) {
     const periodeFeilmelding = getDatoFeilmelding(fra, til);
     const avgrensninger: DatovelgerAvgrensninger = {
         minDato: formaterTilISO8601Date(tidligsteTilgjengeligeDatoUtbetalingerRestkonto),
-        maksDato: formaterTilISO8601Date(new Date())
+        maksDato: formaterTilISO8601Date(new Date(Date.now()))
     };
 
     return (

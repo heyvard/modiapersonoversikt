@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export interface VisOppfolgingFraTilDato {
     fra: Date;
     til: Date;
@@ -11,15 +9,14 @@ export interface OppfolgingState {
     ytelserEkspandert: boolean;
 }
 
+const lagDate = (manedFraNow: number) => {
+    const date = new Date(Date.now());
+    date.setMonth(date.getMonth() + manedFraNow);
+    return date;
+};
+
 export const initialState: OppfolgingState = {
-    valgtPeriode: {
-        fra: moment()
-            .subtract(2, 'month')
-            .toDate(),
-        til: moment()
-            .add(1, 'month')
-            .toDate()
-    },
+    valgtPeriode: { fra: lagDate(-2), til: lagDate(1) },
     sykefraværEkspandert: false,
     ytelserEkspandert: false
 };

@@ -17,11 +17,10 @@ import {
     getTypeFromYtelse,
     reduceUtbetlingerTilYtelser
 } from '../utils/utbetalinger-utils';
-import { formaterDato } from '../../../../../utils/string-utils';
 import ErrorBoundary from '../../../../../components/ErrorBoundary';
-import moment from 'moment';
 import { sorterAlfabetisk } from '../../../../../utils/string-utils';
 import DetaljerCollapse from '../../../../../components/DetaljerCollapse';
+import { formaterDato } from '../../../../../utils/date-utils';
 
 interface OwnProps {
     visDetaljer: boolean;
@@ -144,7 +143,7 @@ function getAlleUtbetalteYtelserFraUtbetalinger(utbetalinger: Utbetaling[]) {
 }
 
 function getTypeOgÅrFromYtelse(ytelse: Ytelse): string {
-    return getTypeFromYtelse(ytelse) + ' ' + moment(ytelse.periode.slutt).year();
+    return getTypeFromYtelse(ytelse) + ' ' + new Date(ytelse.periode.slutt).getFullYear();
 }
 
 function getYtelserSammendrag(utbetalinger: Utbetaling[]) {
@@ -157,6 +156,7 @@ function getYtelserSammendrag(utbetalinger: Utbetaling[]) {
             const ytelsesType = gruppe.category;
             const periode = getPeriodeFromYtelser(ytelser);
             const ytelsesKomponentSammendragListe = getYtelsesKomponentSammendragListe(ytelser);
+
             return (
                 <tbody role="rowgroup" key={ytelsesType}>
                     <tr role="row">

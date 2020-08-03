@@ -1,10 +1,8 @@
-import moment from 'moment';
-
 export function erPaaske() {
-    const date = moment();
-    const month = date.month();
-    const day = date.date();
-    const year = date.year();
+    const date = new Date(Date.now());
+    const month = date.getMonth();
+    const day = date.getDate();
+    const year = date.getFullYear();
 
     switch (year) {
         case 2021:

@@ -4,7 +4,6 @@ import Nisselue from './nisselue/Nisselue';
 import Partyhatt from './partyhatt/Partyhatt';
 import { easterEggs, useListenForEasterEgg } from './useListenForEasterEgg';
 import ErrorBoundary from '../../../components/ErrorBoundary';
-import moment from 'moment';
 import PaaskeEgg from './paskeegg/PaaskeEgg';
 import { erPaaske } from './paskeegg/erPaaske';
 import DelayRender from '../../../components/DelayRender';
@@ -15,15 +14,15 @@ function useDefaultEasterEgg() {
         return '';
     }
 
-    const today = moment();
-    const erJul = today.month() === 11 && 20 <= today.date() && today.date() <= 28;
-    const erNyttårsaften = today.month() === 11 && today.date() === 31;
+    const today = new Date(Date.now());
+    const erJul = today.getMonth() === 11 && 20 <= today.getDate() && today.getDate() <= 28;
+    const erNyttarsaften = today.getMonth() === 11 && today.getDate() === 31;
 
     if (erJul) {
         return easterEggs.nisse;
     }
 
-    if (erNyttårsaften) {
+    if (erNyttarsaften) {
         return easterEggs.party;
     }
 

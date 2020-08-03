@@ -11,8 +11,7 @@ import {
     meldingstittel,
     saksbehandlerTekst
 } from '../utils/meldingerUtils';
-import { formatterDatoTid } from '../../../../../utils/date-utils';
-import { formaterDato } from '../../../../../utils/string-utils';
+import { formaterDato, formaterDatoTid } from '../../../../../utils/date-utils';
 import styled from 'styled-components/macro';
 import Tekstomrade, { createDynamicHighlightingRule, defaultRules, Rule } from 'nav-frontend-tekstomrade';
 import Etikett from 'nav-frontend-etiketter';
@@ -154,8 +153,8 @@ function EnkeltMelding(props: Props) {
     const tittel = meldingstittel(props.melding);
     const tittelId = useRef(guid());
     const datoTekst = props.melding.ferdigstiltDato
-        ? formatterDatoTid(props.melding.ferdigstiltDato)
-        : formatterDatoTid(props.melding.opprettetDato);
+        ? formaterDatoTid(props.melding.ferdigstiltDato)
+        : formaterDatoTid(props.melding.opprettetDato);
     const highlightRule = createDynamicHighlightingRule(props.sokeord.split(' '));
 
     return (

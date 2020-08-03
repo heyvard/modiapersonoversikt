@@ -1,8 +1,9 @@
-import moment from 'moment';
 import navfaker from 'nav-faker';
 
 export function getSistOppdatert() {
-    return moment(navfaker.dato.forÅrSiden(5)).toISOString();
+    const dato = new Date(Date.now());
+    dato.setFullYear(dato.getFullYear() - 5);
+    return dato.toISOString();
 }
 
 export function vektetSjanse(seededFaker: Faker.FakerStatic, vekt: Number) {

@@ -10,7 +10,7 @@ import {
     formaterMobiltelefonnummer,
     formaterTelefonnummer
 } from '../../../../../utils/telefon-utils';
-import { formaterDato } from '../../../../../utils/string-utils';
+import { formaterDato } from '../../../../../utils/date-utils';
 import { endretAvTekst } from '../../../../../utils/endretAvUtil';
 import { Normaltekst } from 'nav-frontend-typografi';
 

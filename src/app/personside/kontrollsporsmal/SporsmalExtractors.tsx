@@ -9,12 +9,11 @@ import {
     SivilstandTyper
 } from '../../../models/person/person';
 import { KRRKontaktinformasjon } from '../../../models/kontaktinformasjon';
-import { formaterDato } from '../../../utils/string-utils';
 import { shuffle } from './list-utils';
 import { Svar } from '../../../redux/kontrollSporsmal/types';
-import moment from 'moment';
 import { formatertKontonummerString } from '../../../utils/FormatertKontonummer';
 import { getFodselsdatoFraFnr } from '../../../utils/fnr-utils';
+import { formaterDato } from '../../../utils/date-utils';
 
 export interface SpørsmålsExtractor<T> {
     spørsmål: string;
@@ -109,7 +108,7 @@ export function hentGiftedato(person: Person) {
 }
 
 function hentDato(person: Person): string {
-    const relasjonFraOgMed = moment(person.sivilstand.fraOgMed).format('DD.MM.YYYY');
+    const relasjonFraOgMed = formaterDato(person.sivilstand.fraOgMed);
     const nullDatoFraTPS = '01.01.9999';
 
     if (relasjonFraOgMed === nullDatoFraTPS) {

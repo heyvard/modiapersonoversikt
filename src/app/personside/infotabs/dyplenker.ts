@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { usePaths } from '../../routes/routing';
 import { Utbetaling } from '../../../models/utbetalinger';
 import { useParams } from 'react-router';
@@ -7,6 +6,7 @@ import { useMemo } from 'react';
 import { SakerRouting, useSakerRouting } from './saksoversikt/utils/saksoversiktRoutingUtils';
 import { useQueryParams } from '../../../utils/url-utils';
 import { getUnikYtelseKey, Ytelse } from '../../../models/ytelse/ytelse-utils';
+import { unix } from '../../../utils/date-utils';
 
 interface Dyplenker {
     utbetaling: {
@@ -45,11 +45,10 @@ export function useInfotabsDyplenker(): Dyplenker {
     return useMemo(
         () => ({
             utbetaling: {
-                link: (utbetaling: Utbetaling) => `${paths.utbetlainger}/${moment(utbetaling.posteringsdato).unix()}`,
+                link: (utbetaling: Utbetaling) => `${paths.utbetlainger}/${unix(utbetaling.posteringsdato)}`,
                 route: `${paths.utbetlainger}/:posteringsdato?`,
                 erValgt: (utbetaling: Utbetaling) => {
-                    const posteringsdatoFraUrl = moment.unix((params.posteringsdato as unknown) as number);
-                    return moment(utbetaling.posteringsdato).isSame(posteringsdatoFraUrl);
+                    return unix(utbetaling.posteringsdato) === parseInt(params.posteringsdato!);
                 }
             },
             meldinger: {

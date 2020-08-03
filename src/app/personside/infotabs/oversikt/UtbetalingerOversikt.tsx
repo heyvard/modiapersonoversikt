@@ -4,8 +4,7 @@ import RestResourceConsumer from '../../../../rest/consumer/RestResourceConsumer
 import { Normaltekst } from 'nav-frontend-typografi';
 import styled from 'styled-components/macro';
 import theme from '../../../../styles/personOversiktTheme';
-import { datoStigende, datoSynkende } from '../../../../utils/date-utils';
-import { formaterDato } from '../../../../utils/string-utils';
+import { datoStigende, datoSynkende, formaterDato } from '../../../../utils/date-utils';
 import { Bold } from '../../../../components/common-styled-components';
 import { getGjeldendeDatoForUtbetaling, utbetalingDatoComparator } from '../utbetalinger/utils/utbetalinger-utils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -13,7 +12,6 @@ import VisMerKnapp from '../../../../components/VisMerKnapp';
 import { CenteredLazySpinner } from '../../../../components/LazySpinner';
 import { useInfotabsDyplenker } from '../dyplenker';
 import { utbetalingerTest } from '../dyplenkeTest/utils-dyplenker-test';
-import moment from 'moment';
 import { ReactNode } from 'react';
 
 const ListStyle = styled.ol`
@@ -38,7 +36,9 @@ function UtbetalingerOversikt(props: Props) {
 }
 
 function datoEldreEnn30Dager(utbetaling: Utbetaling) {
-    return moment(getGjeldendeDatoForUtbetaling(utbetaling)) < moment().subtract(30, 'days');
+    const manedSiden = new Date(Date.now());
+    manedSiden.setDate(manedSiden.getDate() - 30);
+    return new Date(getGjeldendeDatoForUtbetaling(utbetaling)) < manedSiden;
 }
 
 function UtbetalingerPanel(props: { utbetalinger: UtbetalingerResponse } & Props) {

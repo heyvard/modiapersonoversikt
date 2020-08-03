@@ -2,7 +2,7 @@ import * as React from 'react';
 import { SyfoPunkt } from '../../../../models/oppfolging';
 import EkspanderbartYtelserPanel from '../ytelser/felles-styling/EkspanderbartYtelserPanel';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { datoSynkende, formatterDato } from '../../../../utils/date-utils';
+import { datoSynkende, formaterDato } from '../../../../utils/date-utils';
 import { StyledTable } from '../../../../utils/table/StyledTable';
 import { useAppState } from '../../../../utils/customHooks';
 import { useDispatch } from 'react-redux';
@@ -18,7 +18,7 @@ function SykefravarsoppfolgingTabell(props: { syfoPunkter: SyfoPunkt[] }) {
 
     const tableHeaders = ['Innen', 'Hendelse', 'Status'];
     const tableRows = sortertPåDato.map((syfopunkt, index) => [
-        formatterDato(syfopunkt.dato),
+        formaterDato(syfopunkt.dato),
         syfopunkt.syfoHendelse,
         syfopunkt.status
     ]);
