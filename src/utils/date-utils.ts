@@ -74,8 +74,8 @@ const manedTilNavnMapping = (manednr: number) => {
     return maneder[manednr];
 };
 
-export function datoVerbose(dato: string | Date) {
-    const datoMoment = asDate(dato);
+export function datoVerbose(dato?: string | Date) {
+    const datoMoment = dato ? asDate(dato) : new Date(Date.now());
     const maned = manedTilNavnMapping(datoMoment.getMonth());
     const ar = datoMoment.getFullYear();
     const dag = datoMoment.getDate();
