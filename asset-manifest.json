@@ -1,0 +1,38 @@
+{
+  "files": {
+    "main.css": "/modiapersonoversikt/static/css/main.ba88ee82.chunk.css",
+    "main.js": "/modiapersonoversikt/static/js/main.bb4045cc.chunk.js",
+    "main.js.map": "/modiapersonoversikt/static/js/main.bb4045cc.chunk.js.map",
+    "runtime-main.js": "/modiapersonoversikt/static/js/runtime-main.084885a9.js",
+    "runtime-main.js.map": "/modiapersonoversikt/static/js/runtime-main.084885a9.js.map",
+    "static/css/2.8dbebae2.chunk.css": "/modiapersonoversikt/static/css/2.8dbebae2.chunk.css",
+    "static/js/2.9d2f8154.chunk.js": "/modiapersonoversikt/static/js/2.9d2f8154.chunk.js",
+    "static/js/2.9d2f8154.chunk.js.map": "/modiapersonoversikt/static/js/2.9d2f8154.chunk.js.map",
+    "static/js/3.c7bfe079.chunk.js": "/modiapersonoversikt/static/js/3.c7bfe079.chunk.js",
+    "static/js/3.c7bfe079.chunk.js.map": "/modiapersonoversikt/static/js/3.c7bfe079.chunk.js.map",
+    "index.html": "/modiapersonoversikt/index.html",
+    "precache-manifest.80bf9c7e57eb8b2069fc3a70861d1874.js": "/modiapersonoversikt/precache-manifest.80bf9c7e57eb8b2069fc3a70861d1874.js",
+    "service-worker.js": "/modiapersonoversikt/service-worker.js",
+    "static/css/2.8dbebae2.chunk.css.map": "/modiapersonoversikt/static/css/2.8dbebae2.chunk.css.map",
+    "static/css/main.ba88ee82.chunk.css.map": "/modiapersonoversikt/static/css/main.ba88ee82.chunk.css.map",
+    "static/js/2.9d2f8154.chunk.js.LICENSE.txt": "/modiapersonoversikt/static/js/2.9d2f8154.chunk.js.LICENSE.txt",
+    "static/media/advarsel-sirkel-fyll.svg": "/modiapersonoversikt/static/media/advarsel-sirkel-fyll.5ad83e5f.svg",
+    "static/media/enkeltmelding.less": "/modiapersonoversikt/static/media/navlogo.9cee5b20.svg",
+    "static/media/chickIcon.svg": "/modiapersonoversikt/static/media/chickIcon.80621d4c.svg",
+    "static/media/cog.af06f74c.svg": "/modiapersonoversikt/static/media/cog.af06f74c.svg",
+    "static/media/download.53b427c7.svg": "/modiapersonoversikt/static/media/download.53b427c7.svg",
+    "static/media/feil-sirkel-fyll.svg": "/modiapersonoversikt/static/media/feil-sirkel-fyll.ebacc0fd.svg",
+    "static/media/infomelding.jpg": "/modiapersonoversikt/static/media/infomelding.13d403c5.jpg",
+    "static/media/nisselue.svg": "/modiapersonoversikt/static/media/nisselue.db70f217.svg",
+    "static/media/oppdateringslogg-knapp.jpg": "/modiapersonoversikt/static/media/oppdateringslogg-knapp.31aff39a.jpg",
+    "static/media/paaskeegg.svg": "/modiapersonoversikt/static/media/paaskeegg.45119c20.svg",
+    "static/media/partyhatt.svg": "/modiapersonoversikt/static/media/partyhatt.7734221c.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.084885a9.js",
+    "static/css/2.8dbebae2.chunk.css",
+    "static/js/2.9d2f8154.chunk.js",
+    "static/css/main.ba88ee82.chunk.css",
+    "static/js/main.bb4045cc.chunk.js"
+  ]
+}
